@@ -1,1 +1,402 @@
-loadstring("\45\45\32\69\108\101\99\116\114\111\110\10\108\111\99\97\108\32\67\111\114\101\71\117\105\32\61\32\103\97\109\101\58\71\101\116\83\10
+-- Electron
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
+-- Loading Screen
+local loadingGui = Instance.new("ScreenGui")
+loadingGui.Name = "ElectronLoading"
+loadingGui.IgnoreGuiInset = true
+loadingGui.ResetOnSpawn = false
+loadingGui.Parent = CoreGui
+
+local bg = Instance.new("Frame")
+bg.Size = UDim2.new(1, 0, 1, 0)
+bg.BackgroundColor3 = Color3.new(0, 0, 0)
+bg.BorderSizePixel = 0
+bg.Parent = loadingGui
+
+local title = Instance.new("TextLabel")
+title.Text = "ElectronBeta"
+title.Font = Enum.Font.GothamBold
+title.TextColor3 = Color3.new(1, 1, 1)
+title.TextSize = 30
+title.BackgroundTransparency = 1
+title.Size = UDim2.new(1, 0, 0, 50)
+title.Position = UDim2.new(0, 0, 0.4, -60)
+title.Parent = bg
+
+local barBack = Instance.new("Frame")
+barBack.Size = UDim2.new(0.6, 0, 0, 20)
+barBack.Position = UDim2.new(0.2, 0, 0.5, 0)
+barBack.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+barBack.BorderSizePixel = 0
+barBack.Parent = bg
+
+local bar = Instance.new("Frame")
+bar.Size = UDim2.new(0, 0, 1, 0)
+bar.BackgroundColor3 = Color3.fromRGB(170, 85, 255) -- Purple
+bar.BorderSizePixel = 0
+bar.Parent = barBack
+
+local percent = Instance.new("TextLabel")
+percent.Size = UDim2.new(1, 0, 1, 0)
+percent.Position = UDim2.new(0, 0, 0, 0)
+percent.BackgroundTransparency = 1
+percent.Font = Enum.Font.Gotham
+percent.TextSize = 14
+percent.TextColor3 = Color3.new(1, 1, 1)
+percent.Text = "0%"
+percent.Parent = barBack
+
+-- Animation
+task.spawn(function()
+	for i = 1, 100 do
+		bar.Size = UDim2.new(i/100, 0, 1, 0)
+		percent.Text = i .. "%"
+		task.wait(7 / 100)
+	end
+	loadingGui:Destroy()
+end)
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
+local gui = Instance.new("ScreenGui", CoreGui)
+gui.Name = "FastJumpscareUI"
+gui.ResetOnSpawn = false
+
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 200, 0, 210) -- increased height for added buttons
+frame.Position = UDim2.new(0.5, -100, 0.5, -105)
+frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+frame.BackgroundTransparency = 0.4
+frame.BorderSizePixel = 0
+frame.Active = true -- keep true for input
+frame.Draggable = false -- disable default draggable, we do manual drag
+
+local scrollFrame = Instance.new("ScrollingFrame", frame)
+scrollFrame.Size = UDim2.new(1, 0, 1, 0)
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 250) -- enough for all buttons
+scrollFrame.ScrollBarThickness = 8
+scrollFrame.BackgroundTransparency = 1
+scrollFrame.BorderSizePixel = 0
+scrollFrame.Active = false
+
+local function createButton(name, positionY, color, text)
+    local btn = Instance.new("TextButton", scrollFrame)
+    btn.Size = UDim2.new(1, -20, 0, 40)
+    btn.Position = UDim2.new(0, 10, 0, positionY)
+    btn.BackgroundColor3 = color
+    btn.TextColor3 = Color3.new(1, 1, 1)
+    btn.Text = text
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 16
+    btn.BorderSizePixel = 0
+    btn.AutoButtonColor = false
+    btn.Active = true
+    btn.Draggable = false
+    return btn
+end
+
+local jumpBtn = createButton("jumpBtn", 10, Color3.fromRGB(139, 0, 0), "FAST JUMPSCARE")
+local espBtn = createButton("espBtn", 60, Color3.fromRGB(0, 90, 200), "2D ESP")
+local tpBtn = createButton("tpBtn", 110, Color3.fromRGB(0, 0, 139), "TP TOOL")
+local noclipBtn = createButton("noclipBtn", 160, Color3.fromRGB(0, 100, 0), "NOCLIP") -- dark green for noclip
+
+local infjumpBtn = createButton("infjumpBtn", 210, Color3.fromRGB(0, 100, 0), "INFINITE JUMP") -- dark green
+local jumpscareNoCDBtn = createButton("jumpscareNoCDBtn", 260, Color3.fromRGB(255, 102, 102), "JUMPSCARE NO CD") -- light red
+
+local function notify(msg)
+    local notif = Instance.new("TextLabel", gui)
+    notif.Size = UDim2.new(0, 180, 0, 30)
+    notif.Position = UDim2.new(1, -190, 1, -40)
+    notif.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    notif.BackgroundTransparency = 0.2
+    notif.TextColor3 = Color3.new(1,1,1)
+    notif.Text = msg
+    notif.Font = Enum.Font.Gotham
+    notif.TextSize = 14
+    notif.BorderSizePixel = 0
+    delay(2, function()
+        notif:Destroy()
+    end)
+end
+
+jumpBtn.MouseButton1Click:Connect(function()
+    local success, err = pcall(function()
+        g = hookfunction(wait, function(seconds)
+            return g(0)
+        end)
+    end)
+    if success then
+        notify("Loaded")
+    else
+        notify("Failed")
+        warn(err)
+    end
+end)
+
+local espEnabled = false
+local espFolder = Instance.new("Folder", gui)
+espFolder.Name = "ESP"
+
+local function createESP(plr)
+    if plr == LocalPlayer then return end
+    local tag = Instance.new("TextLabel")
+    tag.Name = "ESPTag"
+    tag.Text = plr.Name
+    tag.Size = UDim2.new(0, 100, 0, 14)
+    tag.BackgroundTransparency = 1
+    tag.TextSize = 13
+    tag.Font = Enum.Font.Gotham
+    tag.TextColor3 = Color3.new(1, 1, 1)
+    tag.Visible = true
+    tag.Parent = espFolder
+
+    local connection
+    connection = RunService.RenderStepped:Connect(function()
+        if not espEnabled then
+            tag.Visible = false
+            return
+        end
+        if plr.Character and plr.Character:FindFirstChild("Head") then
+            local head = plr.Character.Head
+            local pos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(head.Position + Vector3.new(0, 3, 0))
+            tag.Visible = onScreen
+            if onScreen then
+                tag.Position = UDim2.new(0, pos.X - 50, 0, pos.Y - 40)
+            end
+        else
+            tag.Visible = false
+        end
+    end)
+
+    plr.AncestryChanged:Connect(function()
+        if not plr:IsDescendantOf(game) then
+            tag:Destroy()
+            if connection then
+                connection:Disconnect()
+            end
+        end
+    end)
+end
+
+espBtn.MouseButton1Click:Connect(function()
+    espEnabled = not espEnabled
+    if espEnabled then
+        notify("ESP On")
+        for _, plr in pairs(Players:GetPlayers()) do
+            if not espFolder:FindFirstChild(plr.Name) then
+                createESP(plr)
+            end
+        end
+        Players.PlayerAdded:Connect(createESP)
+    else
+        notify("ESP Off")
+        for _, tag in pairs(espFolder:GetChildren()) do
+            tag:Destroy()
+        end
+    end
+end)
+
+local tool
+
+LocalPlayer.CharacterAdded:Connect(function()
+    tool = nil
+end)
+
+tpBtn.MouseButton1Click:Connect(function()
+    if tool then
+        notify("TP Tool already given")
+        return
+    end
+    notify("TP Tool given")
+
+    tool = Instance.new("Tool")
+    tool.Name = "TP Tool"
+    tool.RequiresHandle = false
+    tool.Parent = LocalPlayer.Backpack
+
+    tool.Activated:Connect(function()
+        local mouse = LocalPlayer:GetMouse()
+        local targetPos = mouse.Hit and mouse.Hit.p
+        if targetPos then
+            LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(targetPos + Vector3.new(0, 3, 0)))
+        end
+    end)
+end)
+
+local noclipEnabled = false
+
+noclipBtn.MouseButton1Click:Connect(function()
+    noclipEnabled = not noclipEnabled
+    if noclipEnabled then
+        notify("Noclip On")
+    else
+        notify("Noclip Off")
+    end
+end)
+
+RunService.Stepped:Connect(function()
+    if noclipEnabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        for _, part in pairs(LocalPlayer.Character:GetChildren()) do
+            if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                part.CanCollide = false
+            end
+        end
+    elseif LocalPlayer.Character then
+        for _, part in pairs(LocalPlayer.Character:GetChildren()) do
+            if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                part.CanCollide = true
+            end
+        end
+    end
+end)
+
+-- Infinite Jump logic
+infjumpBtn.MouseButton1Click:Connect(function()
+    local connection
+    connection = UserInputService.JumpRequest:Connect(function()
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        end
+    end)
+    notify("Infinite Jump Enabled")
+    -- Disable the button after enabling infinite jump to avoid duplicates
+    infjumpBtn.AutoButtonColor = false
+    infjumpBtn.BackgroundColor3 = Color3.fromRGB(0, 70, 0) -- Darker green to indicate enabled
+    infjumpBtn.Text = "INFINITE JUMP (ON)"
+    infjumpBtn.MouseButton1Click:Disconnect()
+end)
+
+-- JumpscareNoCD logic
+jumpscareNoCDBtn.MouseButton1Click:Connect(function()
+    local success, err = pcall(function()
+        spawn(function()
+            while true do
+                wait()
+                local character = LocalPlayer.Character
+                if character and character:FindFirstChild("Jumpscare") and character.Jumpscare:FindFirstChild("Throw") then
+                    character.Jumpscare.Throw:FireServer()
+                end
+            end
+        end)
+    end)
+    if success then
+        notify("Loaded")
+    else
+        notify("Failed")
+        warn(err)
+    end
+end)
+
+-- Manual Dragging logic for main frame
+local dragging = false
+local dragInput, dragStart, startPos
+
+local function update(input)
+    local delta = input.Position - dragStart
+    frame.Position = UDim2.new(
+        startPos.X.Scale,
+        startPos.X.Offset + delta.X,
+        startPos.Y.Scale,
+        startPos.Y.Offset + delta.Y
+    )
+end
+
+frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+frame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        update(input)
+    end
+end)
+
+-- Toggle button for UI visibility
+local toggleBtn = Instance.new("TextButton", CoreGui)
+toggleBtn.Size = UDim2.new(0, 40, 0, 40)
+toggleBtn.Position = UDim2.new(0, 10, 0.5, -20)
+toggleBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+toggleBtn.BorderSizePixel = 0
+toggleBtn.Text = ""
+toggleBtn.AutoButtonColor = false
+toggleBtn.ZIndex = 1000
+
+local icon = Instance.new("TextLabel", toggleBtn)
+icon.Size = UDim2.new(1, 0, 1, 0)
+icon.BackgroundTransparency = 1
+icon.TextColor3 = Color3.new(1,1,1)
+icon.Text = "-"
+icon.Font = Enum.Font.GothamBold
+icon.TextSize = 32
+icon.TextYAlignment = Enum.TextYAlignment.Center
+icon.TextXAlignment = Enum.TextXAlignment.Center
+
+local uiVisible = true
+
+toggleBtn.MouseButton1Click:Connect(function()
+    uiVisible = not uiVisible
+    frame.Visible = uiVisible
+end)
+
+-- Dragging logic for toggleBtn
+local draggingToggle = false
+local dragInputToggle, dragStartToggle, startPosToggle
+
+local function updateToggle(input)
+    local delta = input.Position - dragStartToggle
+    toggleBtn.Position = UDim2.new(
+        startPosToggle.X.Scale,
+        math.clamp(startPosToggle.X.Offset + delta.X, 0, workspace.CurrentCamera.ViewportSize.X - toggleBtn.AbsoluteSize.X),
+        startPosToggle.Y.Scale,
+        math.clamp(startPosToggle.Y.Offset + delta.Y, 0, workspace.CurrentCamera.ViewportSize.Y - toggleBtn.AbsoluteSize.Y)
+    )
+end
+
+toggleBtn.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        draggingToggle = true
+        dragStartToggle = input.Position
+        startPosToggle = toggleBtn.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                draggingToggle = false
+            end
+        end)
+    end
+end)
+
+toggleBtn.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInputToggle = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInputToggle and draggingToggle then
+        updateToggle(input)
+    end
+end)
